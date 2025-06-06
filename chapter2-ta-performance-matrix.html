@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 2 Talent Acquisition Performance Matrix</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #ffffff;
+            color: #1a1a1a;
+            line-height: 1.6;
+            overflow-x: auto;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .glow-effect {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 600px;
+            height: 400px;
+            background: radial-gradient(ellipse at center, rgba(92,229,213,0.08) 0%, transparent 70%);
+            filter: blur(100px);
+            z-index: -1;
+            animation: pulse 4s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.5; }
+        }
+
+        h1 {
+            font-size: 48px;
+            font-weight: 800;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #5CE5D5 0%, #7FEEDA 50%, #5CE5D5 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradient 3s ease-in-out infinite;
+            background-size: 200% 200%;
+        }
+
+        .subtitle {
+            font-size: 20px;
+            color: #666;
+            margin-bottom: 12px;
+            letter-spacing: 0.5px;
+        }
+
+        .chapter2-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 24px;
+            background: #E6FAF8 !important;
+            border: 2px solid #5CE5D5 !important;
+            border-radius: 30px;
+            font-size: 16px;
+            color: #3AA99F !important;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        /* Tabs for different views */
+        .tabs {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        .tab-btn {
+            padding: 12px 24px;
+            border: 2px solid #e5e5e5;
+            background: #fff;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+            font-weight: 600;
+            color: #666;
+        }
+
+        .tab-btn:hover {
+            border-color: #5CE5D5;
+            color: #3AA99F;
+        }
+
+        .tab-btn.active {
+            background: #5CE5D5;
+            color: #fff;
+            border-color: #5CE5D5;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Behavior Matrix Styles */
+        .behavior-matrix {
+            overflow-x: auto;
+            margin: 0 -20px;
+            padding: 0 20px;
+        }
+
+        .behavior-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            background: #ffffff;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+            border: 1px solid #e5e5e5;
+        }
+
+        .behavior-table th {
+            background: #f8f8f8;
+            padding: 20px;
+            text-align: left;
+            font-weight: 700;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-bottom: 2px solid #e5e5e5;
+            color: #333;
+        }
+
+        .behavior-table th:first-child {
+            background: linear-gradient(135deg, #5CE5D5 0%, #3AA99F 100%);
+            color: #fff;
+            font-weight: 800;
+            min-width: 180px;
+        }
+
+        .behavior-table td {
+            padding: 20px;
+            border-bottom: 1px solid #e5e5e5;
+            vertical-align: top;
+            background: #ffffff;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .behavior-table tr:hover td {
+            background: #f9f9f9;
+        }
+
+        .behavior-table td:first-child {
+            background: #E6FAF8 !important;
+            font-weight: 700;
+            color: #3AA99F !important;
+            border-right: 2px solid #e5e5e5;
+        }
+
+        .behavior-table tr:hover td:first-child {
+            background: #D4F7F3 !important;
+        }
+
+        /* Career Levels Styles */
+        .levels-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 24px;
+            margin-top: 30px;
+        }
+
+        .level-card {
+            background: #fff;
+            border: 1px solid #e5e5e5;
+            border-radius: 16px;
+            padding: 24px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .level-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border-color: #5CE5D5;
+        }
+
+        .level-badge {
+            display: inline-block;
+            padding: 8px 16px;
+            background: #5CE5D5;
+            color: #fff;
+            font-weight: 700;
+            font-size: 18px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+        }
+
+        .level-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 12px;
+        }
+
+        .level-roles {
+            margin-bottom: 16px;
+        }
+
+        .role-item {
+            display: inline-block;
+            padding: 6px 12px;
+            background: #E6FAF8;
+            color: #3AA99F;
+            border-radius: 20px;
+            font-size: 14px;
+            margin: 4px;
+            font-weight: 500;
+        }
+
+        .level-description {
+            color: #666;
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 16px;
+        }
+
+        .level-metrics {
+            border-top: 1px solid #e5e5e5;
+            padding-top: 16px;
+            margin-top: 16px;
+        }
+
+        .metric-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .metric-label {
+            color: #666;
+            font-size: 13px;
+        }
+
+        .metric-value {
+            font-weight: 700;
+            color: #333;
+        }
+
+        /* Performance Metrics Styles */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            margin-top: 30px;
+        }
+
+        .metric-card {
+            background: #fff;
+            border: 1px solid #e5e5e5;
+            border-radius: 16px;
+            padding: 24px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border-color: #5CE5D5;
+        }
+
+        .metric-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+
+        .metric-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .metric-number {
+            font-size: 36px;
+            font-weight: 800;
+            color: #5CE5D5;
+            margin-bottom: 8px;
+        }
+
+        .metric-change {
+            display: inline-block;
+            padding: 4px 12px;
+            background: rgba(0,255,136,0.1);
+            color: #00cc6a;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .metric-change.negative {
+            background: rgba(255,107,0,0.1);
+            color: #ff6b00;
+        }
+
+        /* Legend */
+        .legend {
+            margin-top: 40px;
+            padding: 32px;
+            background: #f8f8f8;
+            border-radius: 16px;
+            border: 1px solid #e5e5e5;
+        }
+
+        .legend h3 {
+            margin-bottom: 24px;
+            color: #3AA99F;
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .legend-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .legend-color {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            background: #5CE5D5;
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 32px; }
+            .levels-grid { grid-template-columns: 1fr; }
+            .metrics-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="glow-effect"></div>
+            <h1>Talent Acquisition Performance Matrix</h1>
+            <p class="subtitle">Comprehensive Framework for TA Excellence</p>
+            <div class="chapter2-badge" style="background: #E6FAF8 !important; border: 2px solid #5CE5D5 !important;">
+                <span style="color: #3AA99F !important;">🎯</span>
+                <span style="color: #3AA99F !important;">AI-Driven TA Framework</span>
+            </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="tabs">
+            <button class="tab-btn active" onclick="showTab('behaviors')">Behavior Categories</button>
+            <button class="tab-btn" onclick="showTab('levels')">Career Levels</button>
+            <button class="tab-btn" onclick="showTab('metrics')">Performance Metrics</button>
+        </div>
+
+        <!-- Behavior Categories Tab -->
+        <div id="behaviors" class="tab-content active">
+            <div class="behavior-matrix">
+                <table class="behavior-table">
+                    <thead>
+                        <tr>
+                            <th>Value</th>
+                            <th>Behavior Category</th>
+                            <th>Description</th>
+                            <th>L1 - TA Coordinator</th>
+                            <th>L2 - Talent Partner</th>
+                            <th>L3 - Senior Talent Partner</th>
+                            <th>L4 - Talent Lead / Client Lead</th>
+                            <th>L5 - Director</th>
+                            <th>L6 - Managing Director / Managing Partner</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td rowspan="3" style="color: #3AA99F !important; font-weight: 700;">Relentless</td>
+                            <td style="font-weight: 600;">Ownership & Accountability</td>
+                            <td>We follow through, take initiative, and own outcomes. We never pass the buck - we are relentless in seeing things through, even when it's hard.</td>
+                            <td>Takes personal ownership of every support task from scheduling to follow-up</td>
+                            <td>Manages the end-to-end hiring process independently and proactively</td>
+                            <td>Takes full accountability for delivery in their area and proactively manages up, down, and across the team</td>
+                            <td>Owns all 4 months roadmap, delivery success of the team and for their clients as well as team health</td>
+                            <td>Owns a 12 months+ roadmap and strategy for their area as well as commercial success of their scope</td>
+                            <td>Owns 18 months+ strategy, roadmaps, inputs, commercial results (overall P&L)</td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight: 600;">Growth Mindset & Learning Agility</td>
+                            <td>We always strive to grow - learning from success and failure, staying curious, and evolving our thinking to deliver more impact.</td>
+                            <td>Asks mindful questions to deepen understanding and grow</td>
+                            <td>Seeks feedback proactively and reflects on past delivery to improve hiring outcomes</td>
+                            <td>Adapts quickly to changing client needs and shares learnings in a structured manner with others</td>
+                            <td>Drives a culture of ownership across their team and client accounts</td>
+                            <td>Builds the tone for accountability across the organization and with their client</td>
+                            <td>Models lifelong learning, identifies future skills and capabilities</td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight: 600;">Collaboration & Team Mindset</td>
+                            <td>We are a wolf pack - united as one. We show up for each other. We share ideas, support the team, and create a space where everyone feels safe to contribute.</td>
+                            <td>Works with humility and a service-first mindset</td>
+                            <td>Actively shares knowledge, resources, and learnings with peers</td>
+                            <td>Proactively collaborates across teams and functions</td>
+                            <td>Builds psychological safety and mutual trust in the team</td>
+                            <td>Fosters a collaborative environment across multiple teams</td>
+                            <td>Role-models collaborative leadership and enables others to thrive</td>
+                        </tr>
+                        <tr>
+                            <td rowspan="3" style="color: #3AA99F !important; font-weight: 700;">Loyal</td>
+                            <td style="font-weight: 600;">Client Partnership & Service Excellence</td>
+                            <td>We treat our clients like partners, we are successful when they are. We listen deeply, adapt quickly, and commit to delivering what they need.</td>
+                            <td>Delivers every touchpoint with care and professionalism</td>
+                            <td>Builds strong rapport with hiring managers and candidates</td>
+                            <td>Advises clients with data, experience and insight to make them successful</td>
+                            <td>Acts as the bridge between client priorities and delivery team capacity</td>
+                            <td>Leads client engagement strategy across large and/or multiple accounts</td>
+                            <td>Owns complex enterprise-level partnerships and drives mutual value</td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight: 600;">Stakeholder Management & Influence</td>
+                            <td>We build trust through open, honest, and respectful conversations. We set clear expectations and speak up with courage and care.</td>
+                            <td>Communicates clearly, honestly, and respectfully with internal and external stakeholders</td>
+                            <td>Advises hiring managers on market realities and hiring process</td>
+                            <td>Challenges and steers clients and senior stakeholders constructively</td>
+                            <td>Initiates and leads complex senior stakeholder alignment meetings</td>
+                            <td>Shapes hiring strategy & success through effective executive stakeholder engagement</td>
+                            <td>Drives talent & client level decision-making at the highest level</td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight: 600;">Data Fluency & Insightful Thinking</td>
+                            <td>We use data to speak the truth. We uncover patterns, challenge assumptions, and use evidence to make smarter decisions.</td>
+                            <td>Maintains accurate data in the ATS and proactively identifies basic trends</td>
+                            <td>Shares insights from data to improve hiring outcomes</td>
+                            <td>Proactively conducts complex analysis and uses data to improve delivery strategy</td>
+                            <td>Drives data fluency culture in the team and shapes culture of hiring process</td>
+                            <td>Leverages data to influence organizational decisions and wide improvements</td>
+                            <td>Champions data-driven talent thinking at C-suite level</td>
+                        </tr>
+                        <tr>
+                            <td rowspan="3" style="color: #3AA99F !important; font-weight: 700;">Fearless</td>
+                            <td style="font-weight: 600;">Innovation & Change Orientation</td>
+                            <td>We love improving things - processes, tools, ideas. We bring fresh thinking, curiosity, and energy to everything we do.</td>
+                            <td>Offers practical ideas to improve coordination tools and processes</td>
+                            <td>Experiments proactively with new tools and approaches</td>
+                            <td>Consistently drives impactful innovations to improve hiring processes</td>
+                            <td>Initiates and effectively spearheads holistic innovation to change initiatives</td>
+                            <td>Sponsors change and innovation across the C2 Talent ecosystem</td>
+                            <td>Champions future-oriented talent thinking at C-suite level</td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight: 600;">Experience Orientation and Ownership</td>
+                            <td>We care deeply about every candidate and hiring team interaction. We bring energy, empathy, and consistency to every step of the journey.</td>
+                            <td>Delivers timely, respectful, and accurate communication to candidates</td>
+                            <td>Owns their respective candidate and hiring team's journey end-to-end</td>
+                            <td>Creates consistent, engaging and branded experiences across every touchpoint</td>
+                            <td>Leads team calibration on employer branding and candidate experience</td>
+                            <td>Drives brand experience consistency across accounts and multiple teams</td>
+                            <td>Owns C2 reputation and branding and shapes excellence at scale</td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight: 600;">Problem Solving</td>
+                            <td>We get things done by moving past roadblocks. We take ownership of problems, find solutions, and push hard to deliver.</td>
+                            <td>Escalates issues early and proposes fixes</td>
+                            <td>Identifies and solves pipeline or client process issues independently</td>
+                            <td>Leads resolution on complex problems on team and client level</td>
+                            <td>Coaches team on structured problem solving and enables them to solve independently</td>
+                            <td>Solves strategic talent problems with company wide impact</td>
+                            <td>Drives broader market-level TA innovations and thought leadership</td>
+                        </tr>
+                        <tr>
+                            <td rowspan="2" style="color: #3AA99F !important; font-weight: 700;">Results Driven</td>
+                            <td style="font-weight: 600;">Delivery & Execution</td>
+                            <td>We consistently deliver what we say we will - with speed, quality, and pride. We prioritize outcomes that make a real difference for our clients.</td>
+                            <td>Completes every assigned task with focus and care</td>
+                            <td>Balances speed with detail, even in busy times</td>
+                            <td>Manages delivery across client accounts</td>
+                            <td>Leads delivery across client accounts and sustains planning</td>
+                            <td>Designs delivery systems, operating models and commercial structures</td>
+                            <td>Drives growth and delivery success across portfolio</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Career Levels Tab -->
+        <div id="levels" class="tab-content">
+            <div class="levels-grid">
+                <div class="level-card">
+                    <div class="level-badge">L1</div>
+                    <div class="level-title">Entry Level</div>
+                    <div class="level-roles">
+                        <span class="role-item">Talent Coordinator</span>
+                        <span class="role-item">Talent Admin</span>
+                    </div>
+                    <div class="level-description">
+                        Foundation level focused on coordination and administrative excellence. Responsible for scheduling, data management, and candidate communication support.
+                    </div>
+                    <div class="level-metrics">
+                        <div class="metric-item">
+                            <span class="metric-label">Experience Required:</span>
+                            <span class="metric-value">0-1 years</span>
+                        </div>
+                        <div class="metric-item">
+                            <span class="metric-label">Typical Scope:</span>
+                            <span class="metric-value">5-10 reqs</span>
+                        </div>
+                        <div class="metric-item">
+                            <span class="metric-label">Autonomy Level:</span>
+                            <span class="metric-value">Guided</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="level-card">
+                    <div class="level-badge">L2</div>
+                    <div class="level-title">Individual Contributor</div>
+                    <div class="level-roles">
+                        <span class="role-item">Talent Partner</span>
+                        <span class="role-item">Talent Research & Insights Partner</span>
+                    </div>
+                    <div class="level-description">
+                        Core delivery level managing end-to-end recruiting for specific roles. Builds candidate pipelines and manages hiring manager relationships.
+                    </div>
+                    <div class="level-metrics">
+                        <div class="metric-item">
+                            <span class="metric-label">Experience Required:</span>
+                            <span class="metric-value">1-3 years</span>
+                        </div>
+                        <div class="metric-item">
+                            <span class="metric-label">Typical Scope:</span>
+                            <span class="metric-value">15-25 reqs</span>
+                        </div>
+                        <div class="metric-item">
+                            <span class="metric-label">Autonomy Level:</span>
+                            <span class="metric-value">Independent</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="level-card">
+                    <div class="level-badge">L3</div>
+                    <div class="level-title">Senior Individual Contributor</div>
+                    <div class="level-roles">
+                        <span class="role-item">Senior Talent Partner</span>
+                    </div>
+                    <div class="level-description">
+                        Advanced practitioner handling complex searches and strategic hiring. Mentors junior team members and drives process improvements.
+                    </div>
+                    <div class="level-metrics">
+                        <div class="metric-item">
+                            <span class="metric-label">Experience Required:</span>
+                            <span class="metric-value">3-5 years</span>
+                        </div>
+                        <div class="metric-item">
+                            <span class="metric-label">Typical Scope:</span>
+                            <span class="metric-value">20-30 reqs</span>
+                        </div>
+                        <div class="metric-item">
+                            <span class="metric-label">Autonomy Level:</span>
+                            <span class="metric-value">Highly Independent</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="level-card">
+                    <div class="level-badge">L4</div>
+                    <div class="level-title">Lead</div>
+                    <div class="level-roles">
+                        <span class="role-item">Talent Lead</span>
+                        <span class="role-item">Client Lead</span>
+                    </div>
+                    <div class="level-description">
+                        First level of leadership managing teams and client relationships. Owns delivery outcomes and team development.
+                    </div>
+                    <div class="level-metrics">
+                        <div class="metric-item">
+                            <span class="metric-label">Experience Required:</span>
+                            <span class="metric-value">5-7 years</span>
+                        </div>
+                        <div class="metric-item">
+                            <span class="metric-label">Team Size:</span>
+                            <span class="metric-value">3-5 people</span>
+                        </div>
+                        <div class="metric-item">
+                            <span class="metric-label">Client Scope:</span>
+                            <span class="metric-value">1-2 accounts</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="level-card">
+                    <div class="level-badge">L5</div>
+                    <div class="level-title">Director</div>
+                    <div class="level-roles">
+                        <span class="role-item">Director</span>
+                    </div>
+                    <div class="level-description">
+                        Strategic leader driving operational excellence and client success. Owns P&L responsibility and shapes organizational strategy.
+                    </div>
+                    <div class="level-metrics">
+                        <div class="metric-item">
+                            <span class="metric-label">Experience Required:</span>
+                            <span class="metric-value">7-10 years</span>
+                        </div>
+                        <div class="metric-item">
+                            <span class="metric-label">Team Size:</span>
+                            <span class="metric-value">10-20 people</span>
+                        </div>
+                        <div class="metric-item">
+                            <span class="metric-label">Revenue Scope:</span>
+                            <span class="metric-value">$1-3M</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="level-card">
+                    <div class="level-badge">L6</div>
+                    <div class="level-title">Executive</div>
+                    <div class="level-roles">
+                        <span class="role-item">Managing Director</span>
+                        <span class="role-item">Managing Partner</span>
+                        <span class="role-item">CxO</span>
+                    </div>
+                    <div class="level-description">
+                        Executive leader shaping company strategy and market positioning. Drives enterprise partnerships and organizational transformation.
+                    </div>
+                    <div class="level-metrics">
+                        <div class="metric-item">
+                            <span class="metric-label">Experience Required:</span>
+                            <span class="metric-value">10+ years</span>
+                        </div>
+                        <div class="metric-item">
+                            <span class="metric-label">Team Size:</span>
+                            <span class="metric-value">20+ people</span>
+                        </div>
+                        <div class="metric-item">
+                            <span class="metric-label">Revenue Scope:</span>
+                            <span class="metric-value">$3M+</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Performance Metrics Tab -->
+        <div id="metrics" class="tab-content">
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-icon">⏱️</div>
+                    <div class="metric-title">Time to Fill</div>
+                    <div class="metric-number">18 days</div>
+                    <div class="metric-change">-28% vs benchmark</div>
+                </div>
+
+                <div class="metric-card">
+                    <div class="metric-icon">💰</div>
+                    <div class="metric-title">Cost per Hire</div>
+                    <div class="metric-number">$2,100</div>
+                    <div class="metric-change">-45% vs industry</div>
+                </div>
+
+                <div class="metric-card">
+                    <div class="metric-icon">⭐</div>
+                    <div class="metric-title">Quality of Hire</div>
+                    <div class="metric-number">92%</div>
+                    <div class="metric-change">+22% performance</div>
+                </div>
+
+                <div class="metric-card">
+                    <div class="metric-icon">😊</div>
+                    <div class="metric-title">Candidate NPS</div>
+                    <div class="metric-number">78</div>
+                    <div class="metric-change">World-class score</div>
+                </div>
+
+                <div class="metric-card">
+                    <div class="metric-icon">🎯</div>
+                    <div class="metric-title">Offer Acceptance</div>
+                    <div class="metric-number">94%</div>
+                    <div class="metric-change">+19% vs average</div>
+                </div>
+
+                <div class="metric-card">
+                    <div class="metric-icon">🚀</div>
+                    <div class="metric-title">Recruiter Efficiency</div>
+                    <div class="metric-number">42 hires/year</div>
+                    <div class="metric-change">2.5x productivity</div>
+                </div>
+            </div>
+
+            <div class="legend">
+                <h3>Performance Benchmarks by Level</h3>
+                <div class="legend-grid">
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: #E6FAF8;"></div>
+                        <div>
+                            <strong>L1-L2:</strong> Building foundational skills and efficiency
+                        </div>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: #B3F2EA;"></div>
+                        <div>
+                            <strong>L3-L4:</strong> Driving consistent high performance
+                        </div>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: #5CE5D5;"></div>
+                        <div>
+                            <strong>L5-L6:</strong> Transforming talent acquisition at scale
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showTab(tabName) {
+            // Hide all tabs
+            const tabs = document.querySelectorAll('.tab-content');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Remove active class from all buttons
+            const buttons = document.querySelectorAll('.tab-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to clicked button
+            event.target.classList.add('active');
+        }
+    </script>
+</body>
+</html>
