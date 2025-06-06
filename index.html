@@ -630,7 +630,7 @@
         <div id="levels" class="tab-content">
             <div class="filter-section" id="levelFilters" style="display: none; margin-bottom: 30px;">
                 <div class="filter-group">
-                    <label class="filter-label">Filter by Level</label>
+                    <label class="filter-label">Level</label>
                     <div class="filter-buttons">
                         <button class="filter-btn active" data-level-card="all">All Levels</button>
                         <button class="filter-btn" data-level-card="L1">L1 - Entry</button>
@@ -970,53 +970,57 @@
             const table = document.querySelector('.behavior-table');
             if (!table) return;
 
-            // Handle column filtering for levels
-            const headers = table.querySelectorAll('th');
-            
-            // Show/hide header columns
-            if (activeLevel === 'all') {
-                headers.forEach(header => header.classList.remove('hidden-column'));
-            } else {
-                headers.forEach((header, index) => {
-                    if (index <= 3) { // Always show first 4 columns
-                        header.classList.remove('hidden-column');
-                    } else {
-                        // Check if this header matches the active level
-                        const headerText = header.textContent.trim();
-                        if (headerText.includes(activeLevel + ' -')) {
-                            header.classList.remove('hidden-column');
-                        } else {
-                            header.classList.add('hidden-column');
-                        }
-                    }
-                });
-            }
-
-            // Apply filters to rows
+            // First, handle row filtering based on value
             const rows = table.querySelectorAll('tbody tr');
             rows.forEach(row => {
-                // Row visibility based on value filter
                 if (activeValue === 'all' || row.dataset.value === activeValue) {
                     row.classList.remove('hidden-row');
                 } else {
                     row.classList.add('hidden-row');
-                    return; // Skip column filtering for hidden rows
                 }
+            });
 
-                // Column visibility based on level filter
-                const cells = row.querySelectorAll('td');
-                cells.forEach((cell, cellIndex) => {
-                    if (cellIndex <= 3) { // Always show first 4 columns
-                        cell.classList.remove('hidden-column');
-                    } else if (cell.dataset.level) {
-                        if (activeLevel === 'all' || cell.dataset.level === activeLevel) {
-                            cell.classList.remove('hidden-column');
-                        } else {
-                            cell.classList.add('hidden-column');
-                        }
+            // Then handle column filtering based on level
+            if (activeLevel === 'all') {
+                // Show all columns
+                table.querySelectorAll('th, td').forEach(cell => {
+                    cell.style.display = '';
+                });
+            } else {
+                // Hide columns that don't match the selected level
+                const headers = table.querySelectorAll('thead th');
+                const columnIndices = [];
+                
+                // Find which columns to show
+                headers.forEach((header, index) => {
+                    const headerText = header.textContent.trim();
+                    // Always show first 4 columns (Value, Category, Description, and selected level)
+                    if (index < 3 || headerText.startsWith(activeLevel + ' -')) {
+                        columnIndices.push(index);
+                        header.style.display = '';
+                    } else if (index >= 3) {
+                        header.style.display = 'none';
                     }
                 });
-            });
+
+                // Apply to all body rows
+                rows.forEach(row => {
+                    const cells = row.querySelectorAll('td');
+                    cells.forEach((cell, index) => {
+                        // Always show first 3 columns
+                        if (index < 3) {
+                            cell.style.display = '';
+                        } else {
+                            // Check if this cell's level matches
+                            if (cell.dataset.level === activeLevel) {
+                                cell.style.display = '';
+                            } else {
+                                cell.style.display = 'none';
+                            }
+                        }
+                    });
+                });
+            }
         }
     </script>
 </body>
