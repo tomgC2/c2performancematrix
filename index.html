@@ -191,6 +191,23 @@
             display: block;
         }
 
+        /* Value cell styles */
+        .value-cell {
+            background: #E6FAF8 !important;
+            color: #3AA99F !important;
+            font-weight: 700;
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+            text-align: center;
+            vertical-align: middle;
+            border-right: 2px solid #e5e5e5;
+            min-width: 60px;
+        }
+
+        .value-group-first {
+            border-top: 3px solid #3AA99F;
+        }
+
         /* Behavior Matrix Styles */
         .behavior-matrix {
             overflow-x: auto;
@@ -460,7 +477,7 @@
         <!-- Filter Section -->
         <div class="filter-section" id="behaviorFilters" style="display: block;">
             <div class="filter-group">
-                <label class="filter-label">Level</label>
+                <label class="filter-label">Filter by Level</label>
                 <div class="filter-buttons">
                     <button class="filter-btn active" data-level="all">All Levels</button>
                     <button class="filter-btn" data-level="L1">L1 - Coordinator</button>
@@ -472,7 +489,7 @@
                 </div>
             </div>
             <div class="filter-group">
-                <label class="filter-label">Value</label>
+                <label class="filter-label">Filter by Value</label>
                 <div class="filter-buttons">
                     <button class="filter-btn active" data-value="all">All Values</button>
                     <button class="filter-btn" data-value="relentless">🔥 Relentless</button>
@@ -595,7 +612,6 @@
                             <td data-level="L6">Drives broader market-level TA innovations and thought leadership</td>
                         </tr>
                         <tr data-value="results">
-                            <td rowspan="2" style="color: #3AA99F !important; font-weight: 700;">Results Driven</td>
                             <td style="font-weight: 600;">Delivery & Execution</td>
                             <td>We consistently deliver what we say we will - with speed, quality, and pride. We prioritize outcomes that make a real difference for our clients.</td>
                             <td data-level="L1">Completes every assigned task with focus and care</td>
@@ -877,11 +893,18 @@
             event.target.classList.add('active');
             
             // Show/hide filters based on tab
-            const filterSection = document.getElementById('behaviorFilters');
+            const behaviorFilters = document.getElementById('behaviorFilters');
+            const levelFilters = document.getElementById('levelFilters');
+            
             if (tabName === 'behaviors') {
-                filterSection.style.display = 'block';
+                behaviorFilters.style.display = 'block';
+                levelFilters.style.display = 'none';
+            } else if (tabName === 'levels') {
+                behaviorFilters.style.display = 'none';
+                levelFilters.style.display = 'block';
             } else {
-                filterSection.style.display = 'none';
+                behaviorFilters.style.display = 'none';
+                levelFilters.style.display = 'none';
             }
         }
 
@@ -901,7 +924,28 @@
                         
                         // Apply filters
                         applyFilters();
+                        // Level card filter buttons
+            const levelCardButtons = document.querySelectorAll('.filter-btn[data-level-card]');
+            levelCardButtons.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    // Update active button
+                    document.querySelectorAll('.filter-btn[data-level-card]').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Filter level cards
+                    const levelCards = document.querySelectorAll('.level-card');
+                    const selectedLevel = this.dataset.levelCard;
+                    
+                    levelCards.forEach(card => {
+                        if (selectedLevel === 'all' || card.dataset.level === selectedLevel) {
+                            card.style.display = 'block';
+                        } else {
+                            card.style.display = 'none';
+                        }
                     });
+                });
+            });
+        });
                 }
             });
 
@@ -928,61 +972,50 @@
 
             // Handle column filtering for levels
             const headers = table.querySelectorAll('th');
-            const levelColumnIndices = {
-                'L1': 3,
-                'L2': 4,
-                'L3': 5,
-                'L4': 6,
-                'L5': 7,
-                'L6': 8
-            };
-
-            // Show/hide columns based on level filter
-            headers.forEach((header, index) => {
-                if (index > 2) { // Skip first 3 columns (Value, Category, Description)
-                    if (activeLevel === 'all') {
+            
+            // Show/hide header columns
+            if (activeLevel === 'all') {
+                headers.forEach(header => header.classList.remove('hidden-column'));
+            } else {
+                headers.forEach((header, index) => {
+                    if (index <= 3) { // Always show first 4 columns
                         header.classList.remove('hidden-column');
                     } else {
-                        const shouldShow = Object.entries(levelColumnIndices).some(([level, colIndex]) => 
-                            level === activeLevel && colIndex === index
-                        );
-                        if (shouldShow) {
+                        // Check if this header matches the active level
+                        const headerText = header.textContent.trim();
+                        if (headerText.includes(activeLevel + ' -')) {
                             header.classList.remove('hidden-column');
                         } else {
                             header.classList.add('hidden-column');
                         }
                     }
-                }
-            });
+                });
+            }
 
-            // Apply same visibility to all cells in each column
+            // Apply filters to rows
             const rows = table.querySelectorAll('tbody tr');
             rows.forEach(row => {
+                // Row visibility based on value filter
+                if (activeValue === 'all' || row.dataset.value === activeValue) {
+                    row.classList.remove('hidden-row');
+                } else {
+                    row.classList.add('hidden-row');
+                    return; // Skip column filtering for hidden rows
+                }
+
+                // Column visibility based on level filter
                 const cells = row.querySelectorAll('td');
-                cells.forEach((cell, index) => {
-                    if (cell.dataset.level) {
-                        const cellIndex = Array.from(cell.parentElement.cells).indexOf(cell);
-                        const header = headers[cellIndex];
-                        if (header && header.classList.contains('hidden-column')) {
-                            cell.classList.add('hidden-column');
-                        } else {
+                cells.forEach((cell, cellIndex) => {
+                    if (cellIndex <= 3) { // Always show first 4 columns
+                        cell.classList.remove('hidden-column');
+                    } else if (cell.dataset.level) {
+                        if (activeLevel === 'all' || cell.dataset.level === activeLevel) {
                             cell.classList.remove('hidden-column');
+                        } else {
+                            cell.classList.add('hidden-column');
                         }
                     }
                 });
-            });
-
-            // Handle row filtering for values
-            rows.forEach(row => {
-                if (activeValue === 'all') {
-                    row.classList.remove('hidden-row');
-                } else {
-                    if (row.dataset.value === activeValue) {
-                        row.classList.remove('hidden-row');
-                    } else {
-                        row.classList.add('hidden-row');
-                    }
-                }
             });
         }
     </script>
